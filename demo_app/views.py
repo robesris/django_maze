@@ -6,11 +6,14 @@ from demo_app.models import Maze, Room
 def index(request):
     maze_list = Maze.objects.all()
     template = loader.get_template('demo_app/index.html')
+    params = []
+    for maze in maze_list:
+        params.append([maze, maze.room_set.all()[0].id])
     context = Context({
-        'maze_list': maze_list,
-
+        #'maze_list': maze_list,
+        'params': params,
         # This is only gonna work when there's only one maze
-        'first_room': maze_list[0].room_set.all()[1].id
+        #'first_room': maze_list[0].room_set.all()[1].id
     })
     return HttpResponse(template.render(context))
 

@@ -1,9 +1,11 @@
-{% if maze_list %}
+<div style="font-family:sans-serif">
+{% if params %}
     <ul>
-    {% for maze in maze_list %}
-        <li><a href="/rooms/{{ first_room }}/">{{ maze.name }}</a></li>
+    {% for param in params %}
+        <li><a href="/rooms/{{ param.1 }}/">{{ param.0.name }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
     <p>There are no mazes.</p>
-{% endif %}
+    {% endif %}
+</div>
