@@ -1,0 +1,22 @@
+{% if room %}
+    <p>{{ room.description }}</p>
+    <ul>
+        {% if room.north %}
+        <li><a href="/rooms/{{ first_room }}/">Go North</a></li>
+        {% endif %}
+        {% if room.south %}
+        <li><a href="/rooms/{{ first_room }}/">Go South</a></li>
+        {% endif %}
+        {% if room.east %}
+        <li><a href="/rooms/{{ first_room }}/">Go East</a></li>
+        {% endif %}
+        {% if room.west %}
+
+        <li><a href="/rooms/{{ first_room }}/">Go West</a></li>
+        {% endif %}
+
+    </ul>
+{% else %}
+    <p>There are no rooms.</p>
+{% endif %}
+

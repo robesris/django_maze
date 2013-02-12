@@ -1,0 +1,37 @@
+<style>
+    div {
+        width: 450px;
+        padding: 20px;
+        margin: 200px auto 0 auto;
+        background-color: #{{ room.color }};
+        font-family: sans-serif;
+        border-radius: 20px;
+    }
+</style>
+
+{% if room %}
+<div>
+    <p style="font-weight:bold">{{ room.name }}</p>
+    <p>{{ room.description }}</p>
+    <ul>
+        {% if room.north %}
+        <li><a href="/rooms/{{ room.north.id }}/">Go North</a></li>
+        {% endif %}
+        {% if room.south %}
+        <li><a href="/rooms/{{ room.south.id }}/">Go South</a></li>
+        {% endif %}
+        {% if room.east %}
+        <li><a href="/rooms/{{ room.east.id }}/">Go East</a></li>
+        {% endif %}
+        {% if room.west %}
+
+        <li><a href="/rooms/{{ room.west.id }}/">Go West</a></li>
+        {% endif %}
+
+    </ul>
+</div>
+{% else %}
+    <p>There are no rooms.</p>
+{% endif %}
+
+

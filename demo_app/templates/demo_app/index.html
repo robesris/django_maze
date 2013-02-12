@@ -1,0 +1,9 @@
+{% if maze_list %}
+    <ul>
+    {% for maze in maze_list %}
+        <li><a href="/rooms/{{ first_room }}/">{{ maze.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>There are no mazes.</p>
+{% endif %}
