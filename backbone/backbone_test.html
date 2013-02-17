@@ -62,7 +62,7 @@
       });*/
 
       var mazes = new Backbone.Collection;
-      mazes.url = 'http://testserver.loc/r_mazes'
+      mazes.url = 'http://testserver.loc:8888/r_mazes'
       mazes.fetch({
         success: function(mazes) {
           console.log("Collection Success.");
