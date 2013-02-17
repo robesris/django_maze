@@ -5,7 +5,7 @@ from rest_framework import serializers
 class MazeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Maze
-        fields = ('url', 'username', 'email', 'groups')
+        fields = ('url', 'name', 'created_date')
 
 class RoomSerializer(serializers.HyperlinkedModelSerializer):
     permissions = serializers.ManySlugRelatedField(
@@ -15,4 +15,4 @@ class RoomSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Room
-        fields = ('url', 'name', 'permissions')
+        fields = ('url', 'maze', 'name', 'description', 'north', 'south', 'east', 'west')
