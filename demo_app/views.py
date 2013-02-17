@@ -2,6 +2,11 @@ from django.http import HttpResponse
 from django.template import Context, loader
 
 from demo_app.models import Maze, Room
+from rest_framework import generics
+from rest_framework.decorators import api_view
+from rest_framework.reverse import reverse
+from rest_framework.response import Response
+from demo_app.serializers import MazeSerializer, RoomSerializer
 
 def index(request):
     maze_list = Maze.objects.all()
@@ -25,3 +30,46 @@ def room(request, room_id):
     })
 
     return HttpResponse(template.render(context))
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    """
+    The entry endpoint of our API.
+    """
+    maze_list = Maze.objects.all()
+    room_list = Room.objects.all()
+
+    return Response({
+        #'mazes': reverse(maze_list, request=request),
+        #'rooms': reverse(room_list, request=request),
+        'mazes': maze_list,
+        'rooms': room_list
+    })
+
+class MazeList(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of mazes.
+    """
+    model = Maze
+    serializer_class = MazeSerializer
+
+class MazeDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single maze.
+    """
+    model = Maze 
+    serializer_class = MazeSerializer
+
+class RoomList(generics.ListCreateAPIView):
+    """
+    API endpoint that represents a list of rooms.
+    """
+    model = Room
+    serializer_class = RoomSerializer
+
+class RoomDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that represents a single room.
+    """
+    model = Room
+    serializer_class = RoomSerializer
