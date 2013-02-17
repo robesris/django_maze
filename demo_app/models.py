@@ -6,7 +6,7 @@ from django.utils import timezone
 # Create your models here.
 class Maze(models.Model):
     name = models.CharField(max_length=200)
-    created_date = models.DateTimeField('built at')
+    created_date = models.DateTimeField('built at', blank=True, null=True)
 
     def __unicode__(self):
         return self.name
