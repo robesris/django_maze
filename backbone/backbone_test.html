@@ -9,6 +9,7 @@
    
 
     <script>
+      var mazes;
       Maze = Backbone.Model.extend({
         urlRoot: 'http://maze.froganddragon.com/r_mazes',
         initialize: function(){
@@ -39,7 +40,7 @@
         }
       });
     
-      var mazes = new Backbone.Collection;
+      mazes = new Backbone.Collection;
       //mazes.url = 'http://testserver.loc:8888/r_mazes'
       mazes.url = 'http://maze.froganddragon.com/r_mazes';
       mazes.fetch({
@@ -47,6 +48,7 @@
         success: function(mazes) {
           console.log("Collection Success.");
           console.log(mazes);
+          renderStuff();
         },
         error: function(mazes) {
           console.log("Collection Error.");
@@ -66,31 +68,6 @@ var maze = new Maze({id: 1});
         }
       });
     
-var myView = function(MazeItemView) {
-    var MazeView = Backbone.View.extend({
-        el: $('#maze_div'),
-        events: {
-        },
-        initialize: function(){
-            this.collection.on('add', this.render, this);
-        },
-
-        render: function(){
-            var $el = $(this.el), self=this;
-
-            this.collection.each(function(list) {
-                var maze;
-                maze = new MazeItemView({ model: list });
-
-                $el.append(item.render().el);
-            });
-
-            return this;
-        }
-    });
-
-    return MazeView;
-};
 
 var subView = Backbone.View.extend({
     initialize: function() {
@@ -99,15 +76,26 @@ var subView = Backbone.View.extend({
 
     render: function() {
         console.log(this.$el);
-        this.$el.html(_.template($('#maze_template').html(), {maze_name:
-            this.model.attributes['name']}));
+        console.log(this.options.stuff);
+        this.$el.html(_.template($('#maze_template').html(), {stuff:
+            this.options.stuff}));
         
     }
 });
     
-$(window).load(function() {
-    var maze_view = new subView({model: maze,  el: $('#maze_container')});
-});
+var renderStuff = function() {
+    console.log('mazes1:');
+    console.log(mazes);
+    var htmlList = "<ul>";
+    mazes.each(function(m) {
+        console.log(m.attributes['name']);
+        htmlList += "<li>" + m.attributes['name'] + "</li>";
+    });
+    htmlList += "</ul>";
+    var maze_view = new subView({stuff: htmlList,  el: $('#maze_container')});
+    console.log('mazes2:');
+    console.log(mazes);
+};
       /************
       Added to httpd.conf:
 
@@ -140,7 +128,8 @@ $(window).load(function() {
    <body>
        <div id="maze_container"></div>
        <script type='text/template' id='maze_template'>
-                             <%= maze_name %>
+           <div>Maze Names</div>
+                             <%= stuff %>
             </script>
 
 
