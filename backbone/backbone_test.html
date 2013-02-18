@@ -4,9 +4,13 @@
     <script src="./underscore.js" type="text/javascript"> </script>
     <script src="./backbone.js" type="text/javascript"> </script>
 
+
+    
+   
+
     <script>
       Maze = Backbone.Model.extend({
-        urlRoot: 'http://backbonetest/r_mazes',
+        urlRoot: 'http://maze.froganddragon.com/r_mazes',
         initialize: function(){
           console.log("Created a new maze.");
           this.on('change:name', function(maze) {
@@ -35,22 +39,23 @@
         }
       });
     
-      /*var maze = new Maze();
-      var mazeDetails = {
-        name: "API-Created Maze"
-      };
+      var mazes = new Backbone.Collection;
+      //mazes.url = 'http://testserver.loc:8888/r_mazes'
+      mazes.url = 'http://maze.froganddragon.com/r_mazes';
+      mazes.fetch({
 
-      maze.save(mazeDetails, {
-        success: function(maze) {
-          alert(maze.toJSON());
+        success: function(mazes) {
+          console.log("Collection Success.");
+          console.log(mazes);
+        },
+        error: function(mazes) {
+          console.log("Collection Error.");
+          console.log(mazes);
         }
-      });*/
-
-      /*var maze = new Maze({id: 1});
+    });
+       
+var maze = new Maze({id: 1});
       maze.fetch({
-        data: {
-          format: 'api',
-        },  
         success: function(maze) {
           console.log("SUCCESS!");
           console.log(maze.toJSON());
@@ -59,30 +64,50 @@
           console.log("ERROR!");
           console.log(maze.toJSON());
         }
-      });*/
-
-      var mazes = new Backbone.Collection;
-      mazes.url = 'http://testserver.loc:8888/r_mazes'
-      mazes.fetch({
-        success: function(mazes) {
-          console.log("Collection Success.");
+      });
+    
+var myView = function(MazeItemView) {
+    var MazeView = Backbone.View.extend({
+        el: $('#maze_div'),
+        events: {
         },
-        error: function(mazes) {
-          console.log("Collection Error.");
-          console.log(mazes);
+        initialize: function(){
+            this.collection.on('add', this.render, this);
+        },
+
+        render: function(){
+            var $el = $(this.el), self=this;
+
+            this.collection.each(function(list) {
+                var maze;
+                maze = new MazeItemView({ model: list });
+
+                $el.append(item.render().el);
+            });
+
+            return this;
         }
-      });
+    });
 
-      /*var MazeList = Backbone.Collection.extend({
-        model: Maze,
-        url: 'http://localhost:8000/r_mazes'
-      });
+    return MazeView;
+};
 
-      var mazeList = new MazeList();
+var subView = Backbone.View.extend({
+    initialize: function() {
+        this.render();
+    },
 
-      mazeList.fetch();*/
-
-
+    render: function() {
+        console.log(this.$el);
+        this.$el.html(_.template($('#maze_template').html(), {maze_name:
+            this.model.attributes['name']}));
+        
+    }
+});
+    
+$(window).load(function() {
+    var maze_view = new subView({model: maze,  el: $('#maze_container')});
+});
       /************
       Added to httpd.conf:
 
@@ -113,6 +138,12 @@
    </head>
 
    <body>
-   </body>
+       <div id="maze_container"></div>
+       <script type='text/template' id='maze_template'>
+                             <%= maze_name %>
+            </script>
+
+
+           </body>
 </html>
 

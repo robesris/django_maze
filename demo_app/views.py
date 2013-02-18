@@ -39,7 +39,10 @@ def api_root(request, format=None):
     maze_list = Maze.objects.all()
     room_list = Room.objects.all()
 
-    return Response({
+    return Response(
+        'headers'={'Access-Control-Allow-Origin':
+            'http://froganddragon.com'},
+        {
         #'mazes': reverse(maze_list, request=request),
         #'rooms': reverse(room_list, request=request),
         'mazes': maze_list,
